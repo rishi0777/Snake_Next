@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.1.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;" xml:space="preserve">
+<style type="text/css">
+	
+	.st0{fill:none;stroke:#fff;stroke-width:28;stroke-miterlimit:20;stroke-dasharray:11.0674,221.3483,11.0674,11.0674,221.3483,11.0674;}
+	.st1{fill:#fff;}
+	.st2{fill:#000000;}
+	svg{
+		cursor:pointer;
+	}
+</style>
+<g>
+	<circle class="st0" cx="250" cy="250" r="232.5">
+	<animateTransform attributeName="transform"
+		attributeType="XML"
+		type="rotate"
+		from="360 250 250"
+		to="0 250 250"
+		dur="10s"
+		repeatCount="indefinite"
+	/>
+	</circle>
+</g>
+<circle class="st1" cx="250" cy="250" r="193"/>
+<rect id="R_1" x="99" y="158" class="st2" width="20" height="191">
+
+</rect>
+<rect id="" x="140" y="116.5" transform="matrix(-1.836970e-16 1 -1 -1.836970e-16 317.5 17.5)" class="st2" width="20" height="102">
+
+</rect>	
+<rect x="181" y="158" class="st2" width="20" height="95">
+
+</rect>
+<rect x="140" y="211.8" transform="matrix(-1.836970e-16 1 -1 -1.836970e-16 412.6925 112.7554)" class="st2" width="20" height="101.9">
+
+</rect>	
+<rect id="M_1" x="250" y="158" class="st2" width="20" height="191">
+<animateTransform attributeName="transform"
+		attributeType="XML"
+		type="translate"
+		values="0,25;0,-45;0,25"
+		dur="5s"
+		repeatCount="indefinite"
+	/>
+</rect>
+<rect x="321" y="158" class="st2" width="20" height="191">
+
+</rect>	
+<rect x="314.2" y="85.9" transform="matrix(-1.836970e-16 1 -1 -1.836970e-16 491.9425 -156.4946)" class="st2" width="20" height="163.6">
+
+</rect>	
+<rect x="386" y="158" class="st2" width="20" height="191">
+
+</rect>
+<g>
+	<g>
+		<path class="st2" d="M114.2,277.5c12,16.4,29.3,23.7,47.3,31.7c7.5,3.3,15.1,6.4,17.6,14.8c3.1,10.3,3.6,21.5,4.5,32.2
+			c2,22.3,4.1,44.7,13.5,65.3c8.9,19.6,24,32.4,44.1,39.5c22.8,8.1,48.5,10.4,70.4-1.5c12.4-6.8,1.4-25.8-11.1-19
+			c-16.1,8.8-35.2,5.5-51.8-0.1c-8.1-2.7-15.7-6.5-21.6-12.8c-5.5-5.7-9.5-13.1-12.2-20.5c-7.1-19.1-8-39.5-10-59.6
+			c-1-10.2-1.6-21.2-5-31c-3.5-9.9-9.9-17.4-19.1-22.5c-15.6-8.6-36.3-12.6-47.4-27.7c-3.5-4.8-9.5-7.2-15.1-3.9
+			C113.4,265.2,110.7,272.7,114.2,277.5L114.2,277.5z"/>
+	</g>
+</g>
+</svg>

@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: var(--text-white);
+}
+
+.heading {
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-h2);
+  font-weight: bold;
+}
+
+.vl {
+  margin: 0 1rem;
+  border-right: 6px solid var(--text-blue);
+  height: calc(var(--line-height-h2) + 1rem);
+}
+
+.desc {
+  font-size: var(--font-size-b1);
+  line-height: var(--line-height-b1);
+}
