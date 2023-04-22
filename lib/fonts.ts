@@ -1,11 +1,17 @@
 import localFont from "next/font/local";
 
 const RobusFont = localFont({
-  src: "@public/assets/fonts/robus.otf",
+  src: "../public/fonts/robus.otf",
 });
 
 const DebugFont = localFont({
-  src: "@public/assets/fonts/debug.otf",
+  src: "../public/fonts/debug.otf",
 });
 
-export { DebugFont, RobusFont };
+const PacFont = localFont({ src: "../public/fonts/pac.ttf" });
+
+const HaloFont = localFont({ src: "../public/fonts/halo.ttf" });
+
+const IomanoidFont = localFont({ src: "../public/fonts/iomanoid.ttf" });
+
+export { DebugFont, RobusFont, PacFont, HaloFont, IomanoidFont };

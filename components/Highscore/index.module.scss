@@ -1,0 +1,81 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
+  background: url("../../public/assets/images/background_high.png") no-repeat
+    center center;
+  background-size: 100% 100%;
+  padding: 0 var(--edge-padding);
+}
+
+.title_container {
+  display: flex;
+  align-items: center;
+  margin: 2rem 0;
+
+  .back {
+    cursor: pointer;
+    color: goldenrod;
+    flex: 0.04;
+    transition: var(--default-transition);
+  }
+
+  .back:hover {
+    color: #ff4136;
+  }
+
+  .title {
+    text-align: left;
+    text-align: center;
+    flex: 1;
+    color: goldenrod;
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-h2);
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+.score_area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.heading_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.heading {
+  flex: 0.3;
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3);
+  font-weight: var(--font-weight-semibold);
+  text-align: center;
+  color: goldenrod;
+  padding-bottom: 0.5rem;
+}
+
+.player_table {
+  flex: 1;
+  display: flex;
+}
+
+.player_info {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.description {
+  flex: 0.3;
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3);
+  font-weight: var(--font-weight-semibold);
+  text-align: center;
+  color: #fff;
+}
