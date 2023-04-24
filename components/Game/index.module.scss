@@ -1,0 +1,86 @@
+.main {
+  background-color: #ffcd00;
+  background-image: linear-gradient(315deg, #ffcd00 0%, #005238 74%);
+  background-size: 100% 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: space-between;
+
+  .game_area {
+    margin-left: 40px;
+    margin-right: 40px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .side_block {
+    flex: 0.15;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+.ask_to_press_key_cnt {
+  display: block;
+  width: 100%;
+  font-weight: 500;
+  font-size: 2rem;
+  text-align: center;
+  line-height: 2;
+}
+
+.board {
+  display: grid;
+
+  background-color: #f2cf43;
+  background-image: linear-gradient(315deg, #f2cf43 0%, #19a186 74%);
+  background-size: 100% 100%;
+  height: 93%;
+  width: 100%;
+  grid-template-rows: repeat(21, 1fr);
+  grid-template-columns: repeat(38, 1fr);
+  border-radius: 0.8rem;
+  border: #fff 0.2rem solid;
+}
+
+.score_label {
+  flex: 0.2;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: rgb(48, 54, 41);
+}
+
+.image_container {
+  flex: 0.55;
+  background-repeat: no-repeat;
+  /*width height already specified in javasscript refer there*/
+}
+
+.score {
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: bold;
+}
+
+.head {
+  background-color: #fce043;
+  background-image: linear-gradient(315deg, #fce043 0%, #fb7ba2 74%);
+  border: 0.25vmin solid white;
+  transform: scale(1.02);
+  border-radius: 50%;
+}
+
+.snake {
+  background-color: #fce043;
+  background-image: linear-gradient(315deg, #fce043 0%, #fb7ba2 74%);
+  border-radius: 50%;
+}
+
+.food {
+  background-color: #e3e3e3;
+  background-image: linear-gradient(147deg, #e3e3e3 0%, #d93965 74%);
+  border-radius: 50%;
+}

@@ -16,13 +16,7 @@
 
   .back {
     cursor: pointer;
-    color: goldenrod;
     flex: 0.04;
-    transition: var(--default-transition);
-  }
-
-  .back:hover {
-    color: #ff4136;
   }
 
   .title {

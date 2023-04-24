@@ -6,6 +6,7 @@ import background from "@public/assets/images/background_high.png";
 import Image from "next/image";
 
 import styles from "./index.module.scss";
+import Button from "@components/Button";
 
 const Highscore = ({}: {}) => {
   const backgroundMusic = useRef<HTMLAudioElement>(null);
@@ -33,8 +34,8 @@ const Highscore = ({}: {}) => {
       </div> */}
 
       <div className={`${styles.title_container} ${PacFont?.className}`}>
-        <div className={styles.back} onClick={goback}>
-          <TfiControlBackward size={40} />
+        <div className={styles.back}>
+          <Button size="small" variant="back" onClick={goback} />
         </div>
         <div className={styles.title}>1 HIGHSCORE 1</div>
       </div>

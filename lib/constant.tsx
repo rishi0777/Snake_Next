@@ -1,1 +1,1 @@
-export const buttonPressPlaybackTime = 1000;
+export const buttonPressPlaybackTime = 1200;

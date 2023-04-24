@@ -1,9 +1,17 @@
-import Highscore from "@components/Highscore";
+import Highscore from "pages/highscore";
 import Head from "next/head";
+import Home from "@components/Home";
 import Image from "next/image";
-import styles from "styles/index.module.scss";
+import { useState } from "react";
+import Game from "@components/Game";
+import styles from "./index.module.scss";
+import Modal from "@components/Modal";
 
-export default function Home() {
+export default function Main() {
+  const [username, setUsername] = useState<string>();
+  const [gameStarted, setGameStarted] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+
   return (
     <>
       <Head>
@@ -12,7 +20,36 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Highscore />
+      <div className={styles.main_container}>
+        {/* <Game username={username || "sdf"} /> */}
+        {!gameStarted ? (
+          <Home
+            username={username}
+            setUsername={setUsername}
+            setGameStarted={setGameStarted}
+          />
+        ) : username ? (
+          <Game username={username} />
+        ) : (
+          <Modal
+            title="OOPS..."
+            message="Something went wrong. Let's try again!"
+            modalVariant={{
+              variant: "alert",
+              buttonText: { ok: "OK" },
+              buttonCallback: {
+                ok: () => {
+                  setGameStarted(false);
+                  setIsOpen(true);
+                },
+              },
+            }}
+            modalState="failure"
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+          />
+        )}
+      </div>
     </>
   );
 }
