@@ -21,7 +21,7 @@ const Home = ({
   const buttonPress = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
-    // backgroundMusic?.current?.play();
+    backgroundMusic?.current?.play();
   }, []);
 
   const pressedButton = () => {
@@ -85,7 +85,7 @@ const Home = ({
       <div className={styles.main}>
         <Modal
           title="WARNING"
-          message="Please provide your username"
+          message="Please provide your name"
           modalVariant={{
             variant: "alert",
             buttonText: { ok: "OK" },

@@ -1,11 +1,17 @@
-import { IomanoidFont, PacFont } from "@lib/fonts";
+import { DebugFont, IomanoidFont, PacFont } from "@lib/fonts";
 import styles from "./index.module.scss";
 import { useEffect, useRef, useState } from "react";
 import Modal from "@components/Modal";
+import { getUserDataFromAPI } from "@lib/helper/getUserData";
+import { UserData } from "@lib/types";
+import Confetti from "@components/Confetti/Confetti";
+import { highscoreCollectionRef } from "@lib/constant";
+import { addDoc } from "firebase/firestore";
 
 const Game = ({ username }: { username: string }) => {
-  const board_ref = useRef<HTMLDivElement>(null);
-  const score_label_ref = useRef<HTMLDivElement>(null);
+  const boardRef = useRef<HTMLDivElement>(null);
+  const scoreLabelRef = useRef<HTMLDivElement>(null);
+  const currentUserRef = useRef<HTMLDivElement>(null);
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>("");
@@ -13,23 +19,25 @@ const Game = ({ username }: { username: string }) => {
   const [mainScreenMessage, setMainScreenMessage] = useState<string>(
     " 111 pRESS sPACE kEY tO sTART tHE gAME tHEN uSE aRROW kEYS tO mOVE tHE sNAKE oTHER kEYS aRE nOT aLLOWED CrEdIt RiShI MiShRa 111"
   );
-
-  // Game Constants & Variables
-  // const foodSound = new Audio("music/food.mp3");
-  // const gameOverSound = new Audio("music/gameover.wav");
-  // const musicSound = new Audio("music/music.mp3");
-
-  // const user_details_form = document.querySelector("#user_details_form");
-  // const set_form_user_name = document.querySelector("#form_user");
-  // const set_form_score = document.querySelector("#form_score");
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
+  const backgroundMusic = useRef<HTMLAudioElement>(null);
+  const foodEatenMusic = useRef<HTMLAudioElement>(null);
+  const gameOverMusic = useRef<HTMLAudioElement>(null);
+  const [topThreeUser, setTopThreeUser] = useState<UserData[]>([]);
+  const [thirdPositionAchieved, setThirdPositionAchieved] = useState(false);
+  const [secondPositionAchieved, setSecondPositionAchieved] = useState(false);
+  const [firstPositionAchieved, setFirstPositionAchieved] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  // var username = localStorage.getItem("username");
+  // Game Constants & Variables
+  const topScorerClass = new Map<number, string>();
+  topScorerClass.set(0, styles.first);
+  topScorerClass.set(1, styles.second);
+  topScorerClass.set(2, styles.third);
   let inputDir = { x: 0, y: 0 };
   let fps = 12;
   let lastPaintTime = 0;
-
   let snakeArr = [{ x: 14, y: 16 }];
   let food = { x: 17, y: 19 };
   let prev_key: any;
@@ -64,7 +72,6 @@ const Game = ({ username }: { username: string }) => {
     ) {
       return true;
     }
-
     return false;
   }
 
@@ -74,12 +81,13 @@ const Game = ({ username }: { username: string }) => {
 
     if (isCollide(snakeArr)) {
       //checking if snake got bumped into wall or into itself
-      // musicSound.pause();
-      // gameOverSound.currentTime = 0; /*making the game over sound to start again if it has played before got paused due to some reason*/
-      // gameOverSound.play();
+      backgroundMusic?.current?.pause();
+      /*making the game over sound to start again if it has played before got paused due to some reason*/
+      gameOverMusic?.current?.play();
+      if (gameOverMusic?.current?.currentTime)
+        gameOverMusic.current.currentTime = 0;
+
       inputDir = { x: 0, y: 0 };
-      // image_cnt.style.background = "url('img/gameOver.png')";
-      // image_cnt.style.backgroundSize = "100% 100%";
       currently_playing = false;
       start = false;
       setGameStarted(false);
@@ -92,7 +100,7 @@ const Game = ({ username }: { username: string }) => {
 
     // If you have eaten the food, increment the score and regenerate the food
     if (snakeArr[0].x === food.x && snakeArr[0].y === food.y) {
-      // foodSound.play();
+      foodEatenMusic?.current?.play();
       setScore((val) => val + 1);
       snakeArr.unshift({
         x: snakeArr[0].x + inputDir.x,
@@ -121,7 +129,7 @@ const Game = ({ username }: { username: string }) => {
 
     // Part 2: Display the snake and Food
     // Display the snake
-    if (board_ref.current) board_ref.current.innerHTML = "";
+    if (boardRef.current) boardRef.current.innerHTML = "";
     snakeArr.forEach((e, index) => {
       let snakeElement = document.createElement("div");
       snakeElement.style.gridRowStart = e.y.toString(); //since row of block will be y co-ordinate
@@ -134,23 +142,19 @@ const Game = ({ username }: { username: string }) => {
         //tail of snake
         snakeElement.classList.add(styles.snake);
       }
-      if (board_ref.current) board_ref.current.appendChild(snakeElement);
+      if (boardRef.current) boardRef.current.appendChild(snakeElement);
     });
     // Display the food
     let foodElement = document.createElement("div");
     foodElement.style.gridRowStart = food.y.toString();
     foodElement.style.gridColumnStart = food.x.toString();
     foodElement.classList.add(styles.food);
-    if (board_ref.current) board_ref.current.appendChild(foodElement);
+    if (boardRef.current) boardRef.current.appendChild(foodElement);
   }
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////Main Logic
-  // musicSound.play();
-  // image_cnt.style.background = "url('img/snake.png')";
-  // image_cnt.style.backgroundSize = "100% 100%";
-
+  //game initializer and eventListener for arrow buttons
   const gameInit = (e: KeyboardEvent) => {
-    if (!isAlertModalOpen && !isConfirmModalOpen) {
+    if (!isAlertModalOpen && !isConfirmModalOpen && !loading) {
       if (!currently_playing) {
         if (e.code === "Space") {
           inputDir.x = 1;
@@ -212,10 +216,83 @@ const Game = ({ username }: { username: string }) => {
     return () => {
       window.removeEventListener("keydown", gameInit);
     };
-  }, [isAlertModalOpen, isConfirmModalOpen]);
+  }, [isAlertModalOpen, isConfirmModalOpen, loading]);
+
+  useEffect(() => {
+    backgroundMusic?.current?.play();
+    getUserDataFromAPI()
+      .then((userDataResponse) => {
+        if (userDataResponse && userDataResponse?.length > 0)
+          setTopThreeUser(userDataResponse.slice(0, 3));
+      })
+      .catch((err) => console.log(err));
+    //dummy->
+    // setTopThreeUser([
+    //   { name: "Abc", score: 3 },
+    //   { name: "def", score: 2 },
+    //   { name: "xyz", score: 2 },
+    // ]);
+  }, []);
+
+  useEffect(() => {
+    let animationTimer: ReturnType<typeof setTimeout> | null = null;
+    //console.log("thirdPositionAchieved-> ", thirdPositionAchieved, "secondPositionAchieved-> ", secondPositionAchieved);
+
+    if (score >= topThreeUser[0]?.score) {
+      if (thirdPositionAchieved && secondPositionAchieved) {
+        // console.log("first -> both true");
+        currentUserRef?.current?.classList?.add(styles.move_up_again);
+      } else if (thirdPositionAchieved) {
+        // console.log("first -> one true");
+        currentUserRef?.current?.classList?.add(styles.move_up);
+        animationTimer = setTimeout(() => {
+          currentUserRef?.current?.classList?.add(styles.move_up_again);
+        }, 1700);
+      } else {
+        // console.log("first -> both false");
+        currentUserRef?.current?.classList?.add(styles.show_player_name);
+        let timesRun = 0;
+        animationTimer = setInterval(() => {
+          timesRun += 1;
+          if (timesRun == 1) {
+            currentUserRef?.current?.classList?.add(styles.move_up);
+          } else {
+            currentUserRef?.current?.classList?.add(styles.move_up_again);
+          }
+          if (timesRun == 2) animationTimer && clearInterval(animationTimer);
+        }, 1700);
+      }
+      setFirstPositionAchieved(true);
+    } else if (!secondPositionAchieved && score >= topThreeUser[1]?.score) {
+      if (thirdPositionAchieved) {
+        //console.log("second -> thirdPositionAchieved true");
+        currentUserRef?.current?.classList?.add(styles.move_up);
+      } else {
+        //console.log("second -> thirdPositionAchieved false");
+        currentUserRef?.current?.classList?.add(styles.show_player_name);
+        animationTimer = setTimeout(() => {
+          currentUserRef?.current?.classList?.add(styles.move_up);
+        }, 1700);
+      }
+      setThirdPositionAchieved(true);
+      setSecondPositionAchieved(true);
+    } else if (!thirdPositionAchieved && score >= topThreeUser[2]?.score) {
+      currentUserRef?.current?.classList?.add(styles.show_player_name);
+      setThirdPositionAchieved(true);
+    }
+
+    return animationTimer
+      ? () => {
+          animationTimer && clearTimeout(animationTimer);
+        }
+      : () => {};
+  }, [score]);
 
   return (
     <>
+      <audio ref={backgroundMusic} src="/assets/music/game.mp3" />
+      <audio ref={foodEatenMusic} src="/assets/music/food.mp3" />
+      <audio ref={gameOverMusic} src="/assets/music/gameover.wav" />
       <Modal
         title={modalTitle}
         message={modalMessage}
@@ -224,22 +301,36 @@ const Game = ({ username }: { username: string }) => {
           buttonText: { yes: "Restart", no: "Home" },
           buttonCallback: {
             yes: () => {
-              // gameOverSound.pause();
-              // image_cnt.style.background = "url('img/snake.png')";
-              // image_cnt.style.backgroundSize = "100% 100%";
-
-              setMainScreenMessage(
-                " 111 pRESS sPACE kEY tO sTART tHE gAME tHEN uSE aRROW kEYS tO mOVE tHE sNAKE oTHER kEYS aRE nOT aLLOWED" +
-                  " CrEdIt RiShI MiShRa 111"
+              setLoading(true);
+              setMainScreenMessage(" Loading ....");
+              console.log(currentUserRef?.current?.className);
+              currentUserRef?.current?.classList?.remove(
+                styles.move_up_again,
+                styles.move_up,
+                styles.show_player_name
               );
-
-              // musicSound.play();
               setScore(0);
-              console.log("restart");
+              gameOverMusic?.current?.pause();
+              if (backgroundMusic?.current?.currentTime)
+                backgroundMusic.current.currentTime = 0;
+              backgroundMusic?.current?.play();
+
+              setTimeout(() => {
+                setMainScreenMessage(
+                  " 111 pRESS sPACE kEY tO sTART tHE gAME tHEN uSE aRROW kEYS tO mOVE tHE sNAKE oTHER kEYS aRE nOT aLLOWED" +
+                    " CrEdIt RiShI MiShRa 111"
+                );
+                setFirstPositionAchieved(false);
+                setSecondPositionAchieved(false);
+                setThirdPositionAchieved(false);
+                setLoading(false);
+              }, 3000);
             },
-            no: () => {
-              //submit userDetails on firestore-> score & username
-              //redirect to home page
+            no: async () => {
+              await addDoc(highscoreCollectionRef, {
+                name: username?.toUpperCase(),
+                score: score,
+              });
               open("/", "_self");
               console.log("home");
             },
@@ -276,15 +367,13 @@ const Game = ({ username }: { username: string }) => {
               {mainScreenMessage}
             </div>
           ) : (
-            <div ref={board_ref} className={styles.board}></div>
+            <div ref={boardRef} className={styles.board}></div>
           )}
         </div>
 
         <div className={styles.side_block}>
-          <div></div>
-
           <div
-            ref={score_label_ref}
+            ref={scoreLabelRef}
             className={`${styles.score_label} ${PacFont?.className}`}
           >
             sCORE
@@ -292,7 +381,38 @@ const Game = ({ username }: { username: string }) => {
               {score}
             </div>
           </div>
-          <div className={styles.image_container}></div>
+
+          {topThreeUser?.length > 0 && (
+            <div className={styles.top_scorers}>
+              {thirdPositionAchieved && <Confetti />}
+              {secondPositionAchieved && <Confetti />}
+              {firstPositionAchieved && <Confetti />}
+              <div
+                ref={currentUserRef}
+                className={`${styles.current_player_info}`}
+              >
+                <div className={`${DebugFont?.className}`}>{username}</div>
+                <div className={`${DebugFont?.className}`}>{score}</div>
+              </div>
+              {topThreeUser?.map((user: UserData, idx: number) => {
+                return (
+                  <div
+                    key={idx}
+                    className={`${topScorerClass.get(idx)} ${
+                      styles.player_info
+                    } `}
+                  >
+                    <div className={`${DebugFont?.className} `}>
+                      {user.name}
+                    </div>
+                    <div className={`${DebugFont?.className}`}>
+                      {user.score}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </>

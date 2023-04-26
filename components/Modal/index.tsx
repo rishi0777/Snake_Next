@@ -52,7 +52,10 @@ const Modal = ({
       className={styles.modal_container}
       style={{ ["--text-color" as string]: textColor }}
     >
-      <div className={styles.modal}>
+      <div
+        className={styles.modal}
+        style={{ ["--game-over-padding" as string]: "30px" }}
+      >
         <div className={styles.image_container}>
           <Image
             alt="snake_image"

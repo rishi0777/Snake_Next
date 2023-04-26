@@ -8,13 +8,13 @@
 
   .game_area {
     margin-left: 40px;
-    margin-right: 40px;
     flex: 1;
     display: flex;
     align-items: center;
   }
 
   .side_block {
+    margin-left: 40px;
     flex: 0.15;
     display: flex;
     flex-direction: column;
@@ -33,7 +33,6 @@
 
 .board {
   display: grid;
-
   background-color: #f2cf43;
   background-image: linear-gradient(315deg, #f2cf43 0%, #19a186 74%);
   background-size: 100% 100%;
@@ -47,22 +46,19 @@
 
 .score_label {
   flex: 0.2;
-  text-align: center;
   font-size: 1.8rem;
   font-weight: bold;
   color: rgb(48, 54, 41);
-}
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 
-.image_container {
-  flex: 0.55;
-  background-repeat: no-repeat;
-  /*width height already specified in javasscript refer there*/
-}
-
-.score {
-  text-align: center;
-  font-size: 2.4rem;
-  font-weight: bold;
+  .score {
+    text-align: center;
+    font-size: 2.4rem;
+    font-weight: bold;
+  }
 }
 
 .head {
@@ -83,4 +79,90 @@
   background-color: #e3e3e3;
   background-image: linear-gradient(147deg, #e3e3e3 0%, #d93965 74%);
   border-radius: 50%;
+}
+
+.top_scorers {
+  display: flex;
+  position: relative;
+  margin-left: 40px;
+
+  .first {
+    bottom: 128px;
+    background: #1e2f23;
+  }
+
+  .second {
+    bottom: 64px;
+    background: #34623f;
+  }
+
+  .third {
+    bottom: 0;
+    background: #607744;
+  }
+}
+
+.player_info,
+.current_player_info {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  height: var(--line-height-h3);
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3);
+  font-weight: var(--font-weight-semibold);
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+  right: 0;
+  width: 100%;
+}
+
+.current_player_info {
+  background: #ee6055;
+  bottom: 0;
+  opacity: 0;
+}
+
+.show_player_name {
+  z-index: 9999;
+  animation: show-player-name 2s 1;
+  opacity: 1;
+}
+
+.move_up {
+  animation: move-up 2s 1;
+  transform: translate(0, -64px);
+}
+
+.move_up_again {
+  animation: move-up_again 2s 1;
+  transform: translate(0, -128px);
+}
+
+@keyframes show-player-name {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes move-up {
+  0% {
+    -webkit-transform: translate(0, 0);
+  }
+  100% {
+    -webkit-transform: translate(0, -64px);
+  }
+}
+
+@keyframes move-up_again {
+  0% {
+    -webkit-transform: translate(0, -64px);
+  }
+  100% {
+    -webkit-transform: translate(0, -128px);
+  }
 }

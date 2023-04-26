@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TfiControlBackward } from "react-icons/tfi";
 import { PacFont, HaloFont } from "@lib/fonts";
 import { buttonPressPlaybackTime } from "@lib/constant";
@@ -7,10 +7,16 @@ import Image from "next/image";
 
 import styles from "./index.module.scss";
 import Button from "@components/Button";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { db } from "@lib/config";
+import { UserData } from "@lib/types";
+import { getUserDataFromAPI } from "@lib/helper/getUserData";
 
 const Highscore = ({}: {}) => {
   const backgroundMusic = useRef<HTMLAudioElement>(null);
   const buttonPress = useRef<HTMLAudioElement>(null);
+
+  const [usersData, setUsersData] = useState<UserData[] | undefined>([]);
 
   const goback = () => {
     backgroundMusic?.current?.pause();
@@ -22,6 +28,16 @@ const Highscore = ({}: {}) => {
 
   useEffect(() => {
     backgroundMusic?.current?.play();
+  }, []);
+
+  useEffect(() => {
+    getUserDataFromAPI()
+      .then((usersDataResposnse) =>
+        usersDataResposnse && usersDataResposnse?.length > 10
+          ? setUsersData(usersDataResposnse.slice(0, 10))
+          : setUsersData(usersDataResposnse)
+      )
+      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -50,17 +66,21 @@ const Highscore = ({}: {}) => {
         </div>
 
         <div className={styles.player_table}>
-          <div className={styles.player_info}>
-            <div className={`${styles.description} ${HaloFont?.className}`}>
-              Number
-            </div>
-            <div className={`${styles.description} ${HaloFont?.className}`}>
-              Name
-            </div>
-            <div className={`${styles.description} ${HaloFont?.className}`}>
-              Score
-            </div>
-          </div>
+          {usersData?.map((user: UserData, idx: number) => {
+            return (
+              <div key={idx} className={styles.player_info}>
+                <div className={`${styles.description} ${HaloFont?.className}`}>
+                  {idx + 1}
+                </div>
+                <div className={`${styles.description} ${HaloFont?.className}`}>
+                  {user.name}
+                </div>
+                <div className={`${styles.description} ${HaloFont?.className}`}>
+                  {user.score}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
