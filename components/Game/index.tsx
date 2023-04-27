@@ -7,6 +7,7 @@ import { UserData } from "@lib/types";
 import Confetti from "@components/Confetti/Confetti";
 import { highscoreCollectionRef } from "@lib/constant";
 import { addDoc } from "firebase/firestore";
+import { GiCrown, GiCrownedSkull } from "react-icons/gi";
 
 const Game = ({ username }: { username: string }) => {
   const boardRef = useRef<HTMLDivElement>(null);
@@ -219,7 +220,7 @@ const Game = ({ username }: { username: string }) => {
   }, [isAlertModalOpen, isConfirmModalOpen, loading]);
 
   useEffect(() => {
-    backgroundMusic?.current?.play();
+    // backgroundMusic?.current?.play();
     getUserDataFromAPI()
       .then((userDataResponse) => {
         if (userDataResponse && userDataResponse?.length > 0)
@@ -302,7 +303,7 @@ const Game = ({ username }: { username: string }) => {
           buttonCallback: {
             yes: () => {
               setLoading(true);
-              setMainScreenMessage(" Loading ....");
+              setMainScreenMessage(" Loading ");
               console.log(currentUserRef?.current?.className);
               currentUserRef?.current?.classList?.remove(
                 styles.move_up_again,
@@ -314,6 +315,16 @@ const Game = ({ username }: { username: string }) => {
               if (backgroundMusic?.current?.currentTime)
                 backgroundMusic.current.currentTime = 0;
               backgroundMusic?.current?.play();
+
+              let timesExecuted = 0,
+                dots = "";
+              const dotLoaderAnimation = setInterval(() => {
+                dots += ".";
+                setMainScreenMessage(" Loading " + dots);
+                if (dots === "...") dots = "";
+                timesExecuted += 1;
+                if (timesExecuted == 9) clearInterval(dotLoaderAnimation);
+              }, 300);
 
               setTimeout(() => {
                 setMainScreenMessage(
@@ -391,7 +402,12 @@ const Game = ({ username }: { username: string }) => {
                 ref={currentUserRef}
                 className={`${styles.current_player_info}`}
               >
-                <div className={`${DebugFont?.className}`}>{username}</div>
+                <div
+                  className={`${DebugFont?.className} ${styles.crown_holder}`}
+                >
+                  {firstPositionAchieved && <GiCrownedSkull color="#FFF" />}
+                  {username}
+                </div>
                 <div className={`${DebugFont?.className}`}>{score}</div>
               </div>
               {topThreeUser?.map((user: UserData, idx: number) => {
@@ -402,7 +418,10 @@ const Game = ({ username }: { username: string }) => {
                       styles.player_info
                     } `}
                   >
-                    <div className={`${DebugFont?.className} `}>
+                    <div
+                      className={`${DebugFont?.className} ${styles.crown_holder}`}
+                    >
+                      {idx === 0 && <GiCrownedSkull color="goldenrod" />}
                       {user.name}
                     </div>
                     <div className={`${DebugFont?.className}`}>

@@ -9,6 +9,7 @@ import Modal from "@components/Modal";
 
 export default function Main() {
   const [username, setUsername] = useState<string>();
+  const [email, setEmail] = useState<string>();
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
@@ -24,8 +25,8 @@ export default function Main() {
         {/* <Game username={username || "sdf"} /> */}
         {!gameStarted ? (
           <Home
-            username={username}
             setUsername={setUsername}
+            setEmail={setEmail}
             setGameStarted={setGameStarted}
           />
         ) : username ? (

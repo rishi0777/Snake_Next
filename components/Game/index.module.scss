@@ -81,6 +81,11 @@
   border-radius: 50%;
 }
 
+.crown_holder {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .top_scorers {
   display: flex;
   position: relative;

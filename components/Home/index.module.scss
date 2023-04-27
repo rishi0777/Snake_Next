@@ -59,31 +59,31 @@
   width: 25rem;
 }
 
-.form {
+.authentication_container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap:1.5rem;
+  gap: 1.5rem;
   align-items: center;
-  height: 15rem;
-  width: 25rem;
 }
 
-.h1 {
-  color: #822609;
+.h1,
+.text {
+  color: #ff013c;
+  font-weight: 900;
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-h2);
 }
 
-.input {
-  font-size: 2rem;
-  font-weight: bold;
-  background: none;
-  border: none;
-  text-align: center;
-  color: #822609;
+.danger {
+  color: #ff013c;
 }
 
-.input:focus {
-  outline: none;
+.logout_buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
 
 @include b.breakpoint(desktop) {

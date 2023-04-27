@@ -1,3 +1,4 @@
+import { IconType } from "react-icons";
 import styles from "./index.module.scss";
 
 type ButtonVariant = "back" | "game";
@@ -5,12 +6,13 @@ type Size = "large" | "medium" | "small";
 
 type ButtonProps = {
   text?: string;
+  icon?: JSX.Element;
   size: Size;
   variant: ButtonVariant;
   onClick: () => void;
 };
 
-const Button = ({ text, size, variant, onClick }: ButtonProps) => {
+const Button = ({ text, icon: Icon, size, variant, onClick }: ButtonProps) => {
   const back_button_size_class =
     size === "small"
       ? styles.small
@@ -25,16 +27,22 @@ const Button = ({ text, size, variant, onClick }: ButtonProps) => {
       ? styles.button_medium
       : styles.button;
 
+  // const Icon = icon;
   return variant === "game" ? (
     <button
       className={`${game_button_size_class}`}
       role="button"
       onClick={onClick}
     >
+      {Icon}
       {text}
     </button>
   ) : (
-    <div className={styles.back_button_container} role="button" onClick={onClick}>
+    <div
+      className={styles.back_button_container}
+      role="button"
+      onClick={onClick}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 17"
