@@ -1,7 +1,6 @@
-import { NextPage } from "next";
 import styles from "./index.module.scss";
 
-const Custom404: NextPage = () => {
+const Custom404= () => {
   return (
     <div className={styles.container}>
       <div className={`${styles.heading}`}>404</div>

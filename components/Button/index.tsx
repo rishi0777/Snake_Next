@@ -1,4 +1,3 @@
-import { IconType } from "react-icons";
 import styles from "./index.module.scss";
 
 type ButtonVariant = "back" | "game";
@@ -27,7 +26,6 @@ const Button = ({ text, icon: Icon, size, variant, onClick }: ButtonProps) => {
       ? styles.button_medium
       : styles.button;
 
-  // const Icon = icon;
   return variant === "game" ? (
     <button
       className={`${game_button_size_class}`}

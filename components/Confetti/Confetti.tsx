@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef } from "react";
-
 import { type IProps } from "react-canvas-confetti";
 
 type CreateConfetti = NonNullable<

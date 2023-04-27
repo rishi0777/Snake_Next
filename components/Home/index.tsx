@@ -30,7 +30,6 @@ const Home = ({
   const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
-    backgroundMusic?.current?.play();
     if (loading) {
     } else if (user) {
       // console.log(
@@ -111,7 +110,12 @@ const Home = ({
 
   return (
     <div className={styles.container}>
-      <audio ref={backgroundMusic} src="/assets/music/main.mp3" />
+      <audio
+        ref={backgroundMusic}
+        src="/assets/music/main.mp3"
+        autoPlay={true}
+        loop={true}
+      />
       <audio ref={buttonPress} src="/assets/music/pressed.mp3" />
 
       <div className={styles.not_available_on_phone}>

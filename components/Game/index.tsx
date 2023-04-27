@@ -1,5 +1,4 @@
 import { DebugFont, IomanoidFont, PacFont } from "@lib/fonts";
-import styles from "./index.module.scss";
 import { useEffect, useRef, useState } from "react";
 import Modal from "@components/Modal";
 import { getUserDataFromAPI } from "@lib/helper/getUserData";
@@ -7,7 +6,9 @@ import { UserData } from "@lib/types";
 import Confetti from "@components/Confetti/Confetti";
 import { highscoreCollectionRef } from "@lib/constant";
 import { addDoc } from "firebase/firestore";
-import { GiCrown, GiCrownedSkull } from "react-icons/gi";
+import { GiCrownedSkull } from "react-icons/gi";
+
+import styles from "./index.module.scss";
 
 const Game = ({ username }: { username: string }) => {
   const boardRef = useRef<HTMLDivElement>(null);
@@ -220,24 +221,17 @@ const Game = ({ username }: { username: string }) => {
   }, [isAlertModalOpen, isConfirmModalOpen, loading]);
 
   useEffect(() => {
-    // backgroundMusic?.current?.play();
+    backgroundMusic?.current?.play();
     getUserDataFromAPI()
       .then((userDataResponse) => {
         if (userDataResponse && userDataResponse?.length > 0)
           setTopThreeUser(userDataResponse.slice(0, 3));
       })
       .catch((err) => console.log(err));
-    //dummy->
-    // setTopThreeUser([
-    //   { name: "Abc", score: 3 },
-    //   { name: "def", score: 2 },
-    //   { name: "xyz", score: 2 },
-    // ]);
   }, []);
 
   useEffect(() => {
     let animationTimer: ReturnType<typeof setTimeout> | null = null;
-    //console.log("thirdPositionAchieved-> ", thirdPositionAchieved, "secondPositionAchieved-> ", secondPositionAchieved);
 
     if (score >= topThreeUser[0]?.score) {
       if (thirdPositionAchieved && secondPositionAchieved) {
@@ -291,7 +285,12 @@ const Game = ({ username }: { username: string }) => {
 
   return (
     <>
-      <audio ref={backgroundMusic} src="/assets/music/game.mp3" />
+      <audio
+        ref={backgroundMusic}
+        src="/assets/music/game.mp3"
+        autoPlay={true}
+        loop={true}
+      />
       <audio ref={foodEatenMusic} src="/assets/music/food.mp3" />
       <audio ref={gameOverMusic} src="/assets/music/gameover.wav" />
       <Modal
