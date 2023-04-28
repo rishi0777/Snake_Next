@@ -160,6 +160,19 @@ const Home = ({
           isOpen={isModalOpen}
           setIsOpen={setIsModalOpen}
         />
+        {/* Hello Username  */}
+        {authenticated && (
+          <div
+            className={`${styles.username_container} ${DebugFont?.className}`}
+          >
+            <span className={styles.username_des}>
+              HELLO{"  "}
+              <span className={styles.username}>
+                {user?.displayName?.split(" ")[0]}
+              </span>
+            </span>
+          </div>
+        )}
 
         {/* Game Buttons */}
         {!isAuthenticationFormOpen && !logoutFormOpen && (
