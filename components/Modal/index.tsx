@@ -62,11 +62,12 @@ const Modal = ({
             fill
             src={
               modalState === "success"
-                ? done?.src
+                ? done
                 : modalState === "failure"
-                ? try_again?.src
-                : game_over?.src
+                ? try_again
+                : game_over
             }
+            placeholder="blur"
           />
         </div>
 

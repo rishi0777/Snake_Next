@@ -8,6 +8,8 @@ import { buttonPressPlaybackTime } from "@lib/constant";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { auth, googleAuthProvider } from "@lib/config";
 import { useAuthState } from "react-firebase-hooks/auth";
+import Image from "next/image";
+import backgroundImage from "@public/assets/images/main_background.jpg";
 
 import styles from "./index.module.scss";
 
@@ -117,6 +119,15 @@ const Home = ({
         loop={true}
       />
       <audio ref={buttonPress} src="/assets/music/pressed.mp3" />
+
+      <div className={styles.image_container}>
+        <Image
+          src={backgroundImage}
+          alt="background_image"
+          fill
+          placeholder="blur"
+        />
+      </div>
 
       <div className={styles.not_available_on_phone}>
         <h1 className={`${styles.h1} ${PacFont?.className}`}>iNsTrUcTiOn</h1>
